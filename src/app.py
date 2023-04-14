@@ -1,23 +1,33 @@
 import os
 
-from pynput import keyboard
-
-from player import play
-
-
-def on_press(key):
-    path = os.getcwd()
-    file = f"{path}/src/test2.mp3"
-    play(file)
-    try:
-        print("alphanumeric key {0} pressed".format(key.char))
-    except AttributeError:
-        print("special key {0} pressed".format(key))
+import pygame
 
 
 def main():
-    with keyboard.Listener(on_press=on_press) as listener:
-        listener.join()
+    pygame.init()
+    pygame.display.set_caption("mo-keeb")
+    size = [100, 100]
+    pygame.display.set_mode(size)
+
+    running = True
+    clock = pygame.time.Clock()
+    path = os.getcwd()
+    file = f"{path}/src/key1.wav"
+    sound = pygame.mixer.Sound(file)
+
+    while running:
+        dt = clock.tick(100) / 1000
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                sound.play()
+
+            if event.type == pygame.QUIT:
+                running = False
+
+        pygame.display.update()
+
+    pygame.quit()
 
 
 if __name__ == "__main__":
