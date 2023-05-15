@@ -33,7 +33,7 @@ def main():
     pygame.font.init()
     pygame.display.set_caption("mo-keeb")
     size = [200, 50]
-    flags = pygame.NOFRAME
+    flags = pygame.SWSURFACE | pygame.NOFRAME
     display = pygame.display.set_mode(size, flags)
 
     clock = pygame.time.Clock()
