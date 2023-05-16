@@ -39,15 +39,9 @@ def main():
     pygame.font.init()
     pygame.display.set_caption("mo-keeb")
     size = [200, 50]
-    flags = pygame.SWSURFACE | pygame.NOFRAME
-    display = pygame.display.set_mode(size, flags)
-
-    if is_on_windows():
-        import win32con
-        import win32gui
-
-        hwnd = pygame.display.get_wm_info()["window"]
-        win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, 0)
+    # flags = pygame.SWSURFACE | pygame.NOFRAME
+    # display = pygame.display.set_mode(size, flags)
+    display = pygame.display.set_mode(size)
 
     clock = pygame.time.Clock()
     listener = keyboard.Listener(
