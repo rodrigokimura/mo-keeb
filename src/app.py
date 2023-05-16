@@ -47,7 +47,7 @@ def main():
         import win32gui
 
         hwnd = pygame.display.get_wm_info()["window"]
-        win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0)
+        win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, 0)
 
     clock = pygame.time.Clock()
     listener = keyboard.Listener(
