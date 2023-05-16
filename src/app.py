@@ -1,7 +1,13 @@
 import os
+import platform
 
 import pygame
 from pynput import keyboard
+
+
+def is_on_windows() -> bool:
+    current_os = platform.system()
+    return current_os == "Windows"
 
 
 def callback(display: pygame.surface.Surface, *args, **kwargs):
@@ -35,6 +41,12 @@ def main():
     size = [200, 50]
     flags = pygame.SWSURFACE | pygame.NOFRAME
     display = pygame.display.set_mode(size, flags)
+
+    if is_on_windows():
+        import win32gui
+
+        hwnd = pygame.display.get_wm_info()["window"]
+        win32gui.SetWindowPos(hwnd, win32gui.HWND_TOPMOST, 0, 0, 0, 0)
 
     clock = pygame.time.Clock()
     listener = keyboard.Listener(
