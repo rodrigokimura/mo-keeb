@@ -1,7 +1,10 @@
-import subprocess
+import os
+
+import pygame
 
 
-def play(file: str):
-    subprocess.Popen(
-        f"mpg123 {file}".split(), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-    )
+def play():
+    path = os.getcwd()
+    file = f"{path}/src/key1.wav"
+    sound = pygame.mixer.Sound(file)
+    sound.play()
