@@ -89,6 +89,10 @@ class App:
         key_name = change_name_to_symbol(key_name)
 
         key_data = {"key": key_name, "typed_at": datetime.now()}
+
+        if len(self.keys_buffer) >= MAX_BUFFER_SIZE:
+            del self.keys_buffer[0]
+
         self.keys_buffer.append(key_data)
 
         self.sound.play()
