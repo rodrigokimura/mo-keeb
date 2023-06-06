@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from typing import List, NamedTuple
 
 import pygame
 import pygame.freetype
@@ -8,10 +9,15 @@ from pynput import keyboard
 from settings import *
 
 
+class CommandData(NamedTuple):
+    key: str
+    typed_at: datetime
+
+
 class App:
     def __init__(self) -> None:
         self.setup()
-        self.keys_buffer = []
+        self.keys_buffer: List[CommandData] = []
         path = os.getcwd()
         file = f"{path}/src/key1.wav"
         self.sound = pygame.mixer.Sound(file)
@@ -62,12 +68,12 @@ class App:
         w = 0
         screen_width = display.get_size()[0]
         for key_data in reversed:
-            key = key_data["key"]
-            typed_at: datetime = key_data["typed_at"]
+            key = key_data.key
+            typed_at = key_data.typed_at
             delta = datetime.now() - typed_at
             delta = delta.total_seconds()
             key_img, key_rect = self.font.render(key, FONT_COLOR)
-            key_img.set_alpha((1 - delta / MAX_AGE_IN_SECONDS) * 255)
+            key_img.set_alpha(int((1 - delta / MAX_AGE_IN_SECONDS) * 255), 0)
             key_rect.topright = ((screen_width - w) - 5, 0)
             w += key_rect.w
             image_data.append((key_img, key_rect))
@@ -79,7 +85,7 @@ class App:
 
     def on_press(self, key: keyboard.KeyCode | keyboard.Key):
         if isinstance(key, keyboard.KeyCode):
-            key_name = key.char
+            key_name = key.char or ""
         elif isinstance(key, keyboard.Key):
             key_name = key.name
         else:
@@ -87,7 +93,7 @@ class App:
 
         key_name = change_name_to_symbol(key_name)
 
-        key_data = {"key": key_name, "typed_at": datetime.now()}
+        key_data = CommandData(key_name, datetime.now())
 
         if len(self.keys_buffer) >= MAX_BUFFER_SIZE:
             del self.keys_buffer[0]
