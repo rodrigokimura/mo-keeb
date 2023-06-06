@@ -98,8 +98,12 @@ def change_name_to_symbol(key_name: str) -> str:
     mapping = {
         "space": "[_]",
         "ctrl": "[C]",
-        "cmd": "[WIN]",
-        "enter": "[ENTER]",
+        "alt": "[A]",
+        "shift": "[S]",
+        "shift_r": "[S]",
+        "cmd": "[W]",
+        "enter": "[E]",
+        "backspace": "[BS]",
     }
     return mapping.get(key_name, key_name)
 
