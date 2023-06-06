@@ -4,6 +4,7 @@ from datetime import datetime
 import pygame
 import pygame.freetype
 from pynput import keyboard
+
 from settings import *
 
 
@@ -63,7 +64,7 @@ class App:
         for key_data in reversed:
             key = key_data["key"]
             typed_at: datetime = key_data["typed_at"]
-            delta = (datetime.now() - typed_at)
+            delta = datetime.now() - typed_at
             delta = delta.total_seconds()
             key_img, key_rect = self.font.render(key, FONT_COLOR)
             key_img.set_alpha((1 - delta / MAX_AGE_IN_SECONDS) * 255)
@@ -76,9 +77,7 @@ class App:
         _, font_rect = self.font.render("w", FONT_COLOR)
         return font_rect.w * MAX_CHARS_TO_DISPLAY
 
-    def on_press(
-        self, key: keyboard.KeyCode | keyboard.Key
-    ):
+    def on_press(self, key: keyboard.KeyCode | keyboard.Key):
         if isinstance(key, keyboard.KeyCode):
             key_name = key.char
         elif isinstance(key, keyboard.Key):
