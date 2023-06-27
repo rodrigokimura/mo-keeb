@@ -22,6 +22,32 @@ class Modifier(enum.StrEnum):
     SHIFT = "shift"
 
 
+def recolor(
+    surf: pygame.surface.Surface, foreground_color: pygame.color.Color | str
+) -> pygame.surface.Surface:
+    mask = pygame.mask.from_surface(surf)
+    transparent = pygame.color.Color(0, 0, 0, 0)
+
+    return mask.to_surface(setcolor=foreground_color, unsetcolor=transparent)
+
+
+class IconImage(NamedTuple):
+    idle: pygame.surface.Surface
+    pressed: pygame.surface.Surface
+
+    @classmethod
+    def from_file(cls, file: str):
+        img = pygame.image.load(file)
+        idle = recolor(img, ICON_IDLE_COLOR)
+        pressed = recolor(img, ICON_PRESSED_COLOR)
+        return cls(idle=idle, pressed=pressed)
+
+    def get_image(self, pressed: bool):
+        if pressed:
+            return self.pressed
+        return self.idle
+
+
 class App:
     def __init__(self) -> None:
         self.setup()
@@ -29,9 +55,10 @@ class App:
         path = os.getcwd()
         file = f"{path}/src/key1.wav"
         self.sound = pygame.mixer.Sound(file)
-        self.font = pygame.freetype.Font("src/assets/pixeldroidMenuRegular.ttf", 48)
+        self.font = pygame.freetype.Font(FONT_FILE, FONT_SIZE)
         self.font.antialiased = False
         self.font.pad = True
+        self.padding = WINDOW_PADDING
 
         self.modifiers = {
             Modifier.SHIFT: False,
@@ -40,14 +67,20 @@ class App:
             Modifier.META: False,
         }
 
+        self.icons = {
+            Modifier.SHIFT: IconImage.from_file(SHIFT_ICON_FILE),
+            Modifier.CTRL: IconImage.from_file(CTRL_ICON_FILE),
+            Modifier.ALT: IconImage.from_file(ALT_ICON_FILE),
+            Modifier.META: IconImage.from_file(SUPER_ICON_FILE),
+        }
+
     def setup(self):
         pygame.init()
         pygame.font.init()
 
     def run(self):
         pygame.display.set_caption("mo-keeb")
-        w = self.get_max_width()
-        size = [w, 120]
+        size = [WINDOW_WIDTH + 2 * self.padding, WINDOW_HEIGTH + 2 * self.padding]
 
         display = pygame.display.set_mode(size)
         display.fill(BACKGROUND_COLOR)
@@ -67,7 +100,6 @@ class App:
                 if event.type == pygame.QUIT:
                     running = False
 
-            # display = pygame.display.get_surface()
             self.update_chars(display)
 
             pygame.display.update()
@@ -92,23 +124,28 @@ class App:
 
             key_img, key_rect = self.font.render(key, FONT_COLOR)
             key_img.set_alpha(int((1 - delta / MAX_AGE_IN_SECONDS) * 255), 0)
-            key_rect.topright = ((screen_width - w) - 5, 0)
+            key_rect.topright = ((screen_width - w) - self.padding, self.padding)
             w += key_rect.w
             image_data.append((key_img, key_rect))
 
             display.blit(key_img, key_rect)
 
-        pygame.draw.circle(
-            display, "red", (50, 50), 10, 0 if self.modifiers[Modifier.SHIFT] else 1
+        icon_width = 90
+        display.blit(
+            self.icons[Modifier.SHIFT].get_image(self.modifiers[Modifier.SHIFT]),
+            (self.padding, 50),
         )
-        pygame.draw.circle(
-            display, "blue", (70, 50), 10, 0 if self.modifiers[Modifier.CTRL] else 1
+        display.blit(
+            self.icons[Modifier.CTRL].get_image(self.modifiers[Modifier.CTRL]),
+            (self.padding + icon_width, 50),
         )
-        pygame.draw.circle(
-            display, "yellow", (90, 50), 10, 0 if self.modifiers[Modifier.ALT] else 1
+        display.blit(
+            self.icons[Modifier.META].get_image(self.modifiers[Modifier.META]),
+            (self.padding + 2 * icon_width, 50),
         )
-        pygame.draw.circle(
-            display, "white", (110, 50), 10, 0 if self.modifiers[Modifier.META] else 1
+        display.blit(
+            self.icons[Modifier.ALT].get_image(self.modifiers[Modifier.ALT]),
+            (self.padding + 3 * icon_width, 50),
         )
 
     def get_max_width(self):
