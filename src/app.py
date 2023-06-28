@@ -54,6 +54,9 @@ class App:
         self.keys_buffer: List[CommandData] = []
         path = os.getcwd()
         file = f"{path}/src/key1.wav"
+        self.volume = VOLUME
+        self.channel = pygame.mixer.Channel(pygame.mixer.get_num_channels() - 1)
+        self.channel.set_volume(self.volume / 100)
         self.sound = pygame.mixer.Sound(file)
         self.font = pygame.freetype.Font(FONT_FILE, FONT_SIZE)
         self.font.antialiased = False
@@ -183,7 +186,7 @@ class App:
 
             self.keys_buffer.append(key_data)
 
-        self.sound.play()
+        self.channel.play(self.sound)
 
     def on_release(self, key: keyboard.KeyCode | keyboard.Key):
         key_name = self._translate_key_name(key)
@@ -192,10 +195,11 @@ class App:
         for mod_name in self.modifiers.keys():
             if mod_name in key_name:
                 self.modifiers[mod_name] = False
-        # self.sound.play()
 
 
 def change_name_to_symbol(key_name: str) -> str:
+    print(key_name)
+
     mapping = {
         "space": " ",
         # "ctrl": "[C]",
