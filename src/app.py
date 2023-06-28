@@ -17,11 +17,16 @@ class App:
         self.modifiers = {modifier: False for modifier in Modifier}
         self.icon_gap = ICON_GAP
         self.setup()
-        self.display: pygame.surface.Surface
         self.keys_buffer: List[CommandData] = []
         self.icons = {
             modifier: IconImage.from_text(modifier.value.desc) for modifier in Modifier
         }
+        self.clipping_rect = pygame.rect.Rect(
+            self.left_pad,
+            self.top_pad,
+            (self.display.get_width() - self.right_pad - self.left_pad),
+            (self.display.get_height() - self.top_pad - self.bottom_pad),
+        )
 
     def setup(self):
         pygame.init()
@@ -32,7 +37,7 @@ class App:
 
     def _setup_fonts(self):
         pygame.font.init()
-        self.font = pygame.freetype.Font(FONT_FILE, FONT_SIZE)
+        self.font = pygame.freetype.Font(FONT_FILE, CHARS_FONT_SIZE)
         self.font.antialiased = False
         self.font.pad = True
 
@@ -102,6 +107,7 @@ class App:
         self.display.fill(BACKGROUND_COLOR)
         self.update_chars()
         self.update_icons()
+        self.display.set_clip(self.clipping_rect)
 
     def update_chars(self):
         image_data = []
@@ -114,7 +120,7 @@ class App:
             delta = datetime.now() - typed_at
             delta = delta.total_seconds()
 
-            key_img, key_rect = self.font.render(key, FONT_COLOR)
+            key_img, key_rect = self.font.render(key, CHARS_COLOR)
             key_img.set_alpha(int((1 - delta / MAX_AGE_IN_SECONDS) * 255), 0)
             key_rect.topright = (width - acc_width - self.right_pad, self.top_pad)
             acc_width += key_rect.w
