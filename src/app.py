@@ -139,6 +139,7 @@ class App:
             acc_width += img.get_size()[0] + self.icon_gap
 
     def _translate_key_name(self, key: keyboard.KeyCode | keyboard.Key):
+        print(key)
         if isinstance(key, keyboard.KeyCode):
             key_name = key.char or ""
             # HACK: force this to alt_gr
@@ -152,9 +153,9 @@ class App:
 
     def on_press(self, key: keyboard.KeyCode | keyboard.Key):
         key_name = self._translate_key_name(key)
-        if len(key_name) == 1:
-            print(chr(ord("C")-64) == key_name)
-            print(chr(ord("c")-64) == key_name)
+        # if len(key_name) == 1:
+        #     print(chr(ord("C")-64) == key_name)
+        #     print(chr(ord("c")-64) == key_name)
 
         mod_pressed = False
         for mod in self.modifiers:
