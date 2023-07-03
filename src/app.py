@@ -152,6 +152,9 @@ class App:
 
     def on_press(self, key: keyboard.KeyCode | keyboard.Key):
         key_name = self._translate_key_name(key)
+        if len(key_name) == 1:
+            print(chr(ord("C")-64) == key_name)
+            print(chr(ord("c")-64) == key_name)
 
         mod_pressed = False
         for mod in self.modifiers:
