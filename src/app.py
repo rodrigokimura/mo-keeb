@@ -207,5 +207,5 @@ class App2:
     ...
 
 if __name__ == "__main__":
-    app = App2()
+    app = App()
     app.run()
