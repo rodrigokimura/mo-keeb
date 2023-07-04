@@ -6,4 +6,4 @@ def is_windows():
 
 
 def get_asset_path(file_name: str):
-    return f"src/assets/{file_name}"
+    return os.path.join("src", "assets", file_name)
