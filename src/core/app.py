@@ -1,18 +1,34 @@
-import os
-import keyboard as keyboard2
 from datetime import datetime
 from typing import List
 
 import pygame
 import pygame.freetype
-from pynput import keyboard
 
+from backends.abstract import Backend
+from backends.keyboard import Keyboard
+from backends.pynput import Pynput
 from constants import CommandData, Modifier
+from core.abstract import AbstractApp
 from icons import IconImage
-from settings import *
+from settings import (
+    BACKEND,
+    BACKGROUND_COLOR,
+    CHARS_COLOR,
+    CHARS_FONT_SIZE,
+    FONT_FILE,
+    ICON_FONT_SIZE,
+    ICON_GAP,
+    ICON_PADDING,
+    MAX_AGE_IN_SECONDS,
+    MAX_BUFFER_SIZE,
+    SOUND_FILE,
+    TEXT_ICON_GAP,
+    VOLUME,
+    WINDOW_PADDING,
+)
 
 
-class App:
+class App(AbstractApp):
     def __init__(self) -> None:
         self.top_pad, self.right_pad, self.bottom_pad, self.left_pad = WINDOW_PADDING
         self.modifiers = {modifier: False for modifier in Modifier}
@@ -28,9 +44,13 @@ class App:
             (self.display.get_width() - self.right_pad - self.left_pad),
             (self.display.get_height() - self.top_pad - self.bottom_pad),
         )
+        self.backend: Backend = (
+            Keyboard(self) if BACKEND == "keyboard" else Pynput(self)
+        )
 
     def setup(self):
         pygame.init()
+        pygame.mixer.init()
         self._setup_fonts()
         self._setup_sound()
         pygame.display.set_caption("mo-keeb")
@@ -47,12 +67,10 @@ class App:
         self.icon_font.pad = True
 
     def _setup_sound(self):
-        path = os.getcwd()
-        file = f"{path}/src/key1.wav"
         self.volume = VOLUME
         self.channel = pygame.mixer.Channel(pygame.mixer.get_num_channels() - 1)
         self.channel.set_volume(self.volume / 100)
-        self.sound = pygame.mixer.Sound(file)
+        self.sound = pygame.mixer.Sound(SOUND_FILE)
 
     def get_width(self):
         _, pad_right, _, pad_left = ICON_PADDING
@@ -84,11 +102,8 @@ class App:
         self.display.fill(BACKGROUND_COLOR)
 
         clock = pygame.time.Clock()
-        listener = keyboard.Listener(
-            on_press=lambda *args, **kwargs: self.on_press(*args, **kwargs),
-            on_release=lambda *args, **kwargs: self.on_release(*args, **kwargs),
-        )
-        listener.start()
+
+        self.backend.setup()
 
         running = True
         while running:
@@ -139,24 +154,7 @@ class App:
             )
             acc_width += img.get_size()[0] + self.icon_gap
 
-    def _translate_key_name(self, key: keyboard.KeyCode | keyboard.Key):
-        if isinstance(key, keyboard.KeyCode):
-            key_name = key.char or ""
-            # HACK: force this to alt_gr
-            if key.vk == 65027:
-                key_name = "alt_gr"
-        elif isinstance(key, keyboard.Key):
-            key_name = key.name
-        else:
-            key_name = ""
-        return key_name
-
-    def on_press(self, key: keyboard.KeyCode | keyboard.Key):
-        key_name = self._translate_key_name(key)
-        # if len(key_name) == 1:
-        #     print(chr(ord("C")-64) == key_name)
-        #     print(chr(ord("c")-64) == key_name)
-
+    def on_press(self, key_name: str):
         mod_pressed = False
         for mod in self.modifiers:
             if mod.value.str_id in key_name:
@@ -175,9 +173,7 @@ class App:
 
         self.channel.play(self.sound)
 
-    def on_release(self, key: keyboard.KeyCode | keyboard.Key):
-        key_name = self._translate_key_name(key)
-
+    def on_release(self, key_name: str):
         # special case
         for mod in self.modifiers:
             if mod.value.str_id in key_name:
@@ -191,21 +187,3 @@ def change_name_to_symbol(key_name: str) -> str:
         "backspace": "[BS]",
     }
     return mapping.get(key_name, key_name)
-
-class App2:
-    def __init__(self) -> None:
-        self.events = []
-        self.running = True
-
-    def run(self):
-        while self.running:
-            ev = keyboard2.read_event()
-            print(ev)
-            self.events.append(ev)
-
-        ...
-    ...
-
-if __name__ == "__main__":
-    app = App()
-    app.run()

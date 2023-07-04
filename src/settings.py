@@ -1,3 +1,7 @@
+from typing import Literal
+
+from utils import get_path, is_windows
+
 BACKGROUND_COLOR = "#1d3557"
 CHARS_COLOR = "#f1faee"
 ICON_COLOR = "#caf0f8"
@@ -14,8 +18,9 @@ MAX_AGE_IN_SECONDS = 5
 MAX_BUFFER_SIZE = 30
 VOLUME = 50
 
-FONT_FILE = "src/assets/pixeldroidMenuRegular.ttf"
-SHIFT_ICON_FILE = "src/assets/shift.png"
-CTRL_ICON_FILE = "src/assets/ctrl.png"
-ALT_ICON_FILE = "src/assets/alt.png"
-SUPER_ICON_FILE = "src/assets/super.png"
+BACKEND: Literal["keyboard"] | Literal["pynput"] = (
+    "keyboard" if is_windows() else "pynput"
+)
+
+FONT_FILE = get_path("assets/pixeldroidMenuRegular.ttf")
+SOUND_FILE = get_path("key1.wav")
