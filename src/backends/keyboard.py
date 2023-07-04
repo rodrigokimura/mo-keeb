@@ -22,6 +22,6 @@ class Keyboard(Backend):
         self.app.on_release(key_name)
 
     def _translate_key(self, key: str):
-        if key == "windows":
+        if "windows" in key:
             return Modifier.META.value.str_id
         return key
