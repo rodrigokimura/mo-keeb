@@ -1,4 +1,7 @@
-*.wav
+# *.wav
 *.mp3
 *.raw
 **/__pycache__/
+build/
+dist/
+main.spec

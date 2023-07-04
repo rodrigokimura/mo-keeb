@@ -5,5 +5,5 @@ def is_windows():
     return os.name == "nt"
 
 
-def get_path(relative_path: str):
-    return f"src/{relative_path}"
+def get_asset_path(file_name: str):
+    return f"src/assets/{file_name}"

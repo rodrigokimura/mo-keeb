@@ -1,6 +1,6 @@
 from typing import Literal
 
-from utils import get_path, is_windows
+from utils import get_asset_path, is_windows
 
 BACKGROUND_COLOR = "#1d3557"
 CHARS_COLOR = "#f1faee"
@@ -22,5 +22,5 @@ BACKEND: Literal["keyboard"] | Literal["pynput"] = (
     "keyboard" if is_windows() else "pynput"
 )
 
-FONT_FILE = get_path("assets/pixeldroidMenuRegular.ttf")
-SOUND_FILE = get_path("key1.wav")
+FONT_FILE = get_asset_path("pixeldroidMenuRegular.ttf")
+SOUND_FILE = get_asset_path("sound.wav")

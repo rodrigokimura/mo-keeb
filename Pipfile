@@ -3,10 +3,17 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[scripts]
+app = "python src/main.py"
+build = "pyinstaller src/main.py --onefile --noupx"
+copy = "cp src/assets dist/assets -r"
+clean = "rm -rf dist"
+
 [packages]
 pygame = "*"
 pynput = "*"
 keyboard = "*"
+pyinstaller = "*"
 
 [dev-packages]
 black = "*"
