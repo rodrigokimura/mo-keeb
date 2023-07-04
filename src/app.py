@@ -139,8 +139,9 @@ class App:
             acc_width += img.get_size()[0] + self.icon_gap
 
     def _translate_key_name(self, key: keyboard.KeyCode | keyboard.Key):
-        print(key)
+        # print(key)
         if isinstance(key, keyboard.KeyCode):
+            print(key.char)
             key_name = key.char or ""
             # HACK: force this to alt_gr
             if key.vk == 65027:
