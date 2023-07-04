@@ -10,8 +10,13 @@ class Keyboard(Backend):
         self.app = app
 
     def setup(self):
-        keyboard.on_press(self.on_press)
-        keyboard.on_release(self.on_release)
+        keyboard.hook(self.on_event)
+
+    def on_event(self, ev: keyboard.KeyboardEvent):
+        if ev.event_type == keyboard.KEY_UP:
+            self.on_release(ev)
+        elif ev.event_type == keyboard.KEY_DOWN:
+            self.on_press(ev)
 
     def on_press(self, ev: keyboard.KeyboardEvent):
         key_name = self._translate_key(ev.name or "")
