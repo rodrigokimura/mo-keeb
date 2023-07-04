@@ -1,4 +1,5 @@
 import os
+import sys
 
 
 def is_windows():
@@ -6,4 +7,11 @@ def is_windows():
 
 
 def get_asset_path(file_name: str):
-    return os.path.join("src", "assets", file_name)
+    root = os.getcwd()
+    if is_in_bunble():
+        return os.path.join(root, "assets", file_name)
+    return os.path.join(root, "src", "assets", file_name)
+
+
+def is_in_bunble():
+    return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
