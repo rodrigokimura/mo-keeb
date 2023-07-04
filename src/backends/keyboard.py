@@ -10,8 +10,8 @@ class Keyboard(Backend):
         self.app = app
 
     def setup(self):
-        keyboard.on_press(self.on_press, suppress=True)
-        keyboard.on_release(self.on_release, suppress=True)
+        keyboard.on_press(self.on_press)
+        keyboard.on_release(self.on_release)
 
     def on_press(self, ev: keyboard.KeyboardEvent):
         key_name = self._translate_key(ev.name or "")
