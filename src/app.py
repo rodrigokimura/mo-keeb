@@ -1,4 +1,5 @@
 import os
+import keyboard as keyboard2
 from datetime import datetime
 from typing import List
 
@@ -139,9 +140,7 @@ class App:
             acc_width += img.get_size()[0] + self.icon_gap
 
     def _translate_key_name(self, key: keyboard.KeyCode | keyboard.Key):
-        # print(key)
         if isinstance(key, keyboard.KeyCode):
-            print(key.char)
             key_name = key.char or ""
             # HACK: force this to alt_gr
             if key.vk == 65027:
@@ -193,7 +192,20 @@ def change_name_to_symbol(key_name: str) -> str:
     }
     return mapping.get(key_name, key_name)
 
+class App2:
+    def __init__(self) -> None:
+        self.events = []
+        self.running = True
+
+    def run(self):
+        while self.running:
+            ev = keyboard2.read_event()
+            print(ev)
+            self.events.append(ev)
+
+        ...
+    ...
 
 if __name__ == "__main__":
-    app = App()
+    app = App2()
     app.run()

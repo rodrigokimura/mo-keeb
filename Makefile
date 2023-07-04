@@ -1,5 +1,5 @@
 run:
-	@pipenv run python src/app.py
+	@pipenv run sudo python src/app.py
 
 lint:
 	@pipenv run black .
