@@ -3,7 +3,7 @@ import os
 import PyInstaller.__main__
 
 import main
-from settings import APP_NAME
+from constants import APP_NAME
 from utils import get_asset_path, get_commit_sha, is_windows
 
 

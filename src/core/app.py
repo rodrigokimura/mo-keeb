@@ -7,10 +7,10 @@ import pygame.freetype
 from backends.abstract import Backend
 from backends.keyboard import Keyboard
 from backends.pynput import Pynput
-from constants import CommandData, Modifier
+from config.models import Config
+from constants import FONT_FILE, MAX_BUFFER_SIZE, SOUND_FILE, CommandData, Modifier
 from core.abstract import AbstractApp
 from icons import IconImage
-from settings import FONT_FILE, MAX_BUFFER_SIZE, SOUND_FILE, Config
 from utils import is_windows
 
 

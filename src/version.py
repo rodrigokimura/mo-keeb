@@ -1,4 +1,4 @@
-from settings import APP_NAME
+from constants import APP_NAME
 from utils import get_version_info
 
 if __name__ == "__main__":

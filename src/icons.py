@@ -3,7 +3,8 @@ from typing import NamedTuple
 import pygame
 import pygame.freetype
 
-from settings import FONT_FILE, Config
+from config.models import Config
+from constants import FONT_FILE
 
 
 def recolor(

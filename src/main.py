@@ -1,10 +1,10 @@
 import pygame
 
+from config.models import Config
 from core.app import App
-from settings import load_config
 
 if __name__ == "__main__":
-    config = load_config()
+    config = Config.load()
     pygame.init()
     app = App(config)
     app.run()
