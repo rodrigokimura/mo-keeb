@@ -25,7 +25,8 @@ def build():
     command = f"{script} {' '.join(f'--{opt}' for opt in options)}"
     PyInstaller.__main__.run(command.split())
 
-def get_executable_file_name(app_name: str, version_id: str, extension = False):
+
+def get_executable_file_name(app_name: str, version_id: str, extension=False):
     name = f"{app_name}_{version_id}"
     if extension:
         if is_windows():
