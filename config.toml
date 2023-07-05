@@ -1,0 +1,23 @@
+# mo-keeb's config file
+
+[colors]
+background = "#1d3557"
+chars = "#f1faee"
+icons = "#caf0f8"
+
+[font_sizes]
+chars = 48
+icons = 24
+
+[paddings]
+window = [10, 10, 10, 10]
+icon = [5, 10, 5, 10]
+
+[gaps]
+below_chars = 10
+between_icons = 5
+
+[behaviour]
+max_age = 5
+volume = 50
+backend = "auto"

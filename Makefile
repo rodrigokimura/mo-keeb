@@ -14,3 +14,6 @@ version:
 lint:
 	@pipenv run black .
 	@pipenv run isort .
+
+test:
+	@pipenv run pytest . -s

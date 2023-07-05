@@ -14,7 +14,9 @@ pynput = "*"
 keyboard = "*"
 pyinstaller = "*"
 gitpython = "*"
+tomlkit = "*"
 
 [dev-packages]
 black = "*"
 isort = "*"
+pytest = "*"
