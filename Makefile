@@ -8,6 +8,9 @@ run:
 build:
 	@pipenv run build
 
+version:
+	@pipenv run version
+
 lint:
 	@pipenv run black .
 	@pipenv run isort .

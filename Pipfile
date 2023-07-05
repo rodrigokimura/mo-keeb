@@ -6,12 +6,14 @@ name = "pypi"
 [scripts]
 app = "python src/main.py"
 build = "python src/build.py"
+version = "python src/version.py"
 
 [packages]
 pygame = "*"
 pynput = "*"
 keyboard = "*"
 pyinstaller = "*"
+gitpython = "*"
 
 [dev-packages]
 black = "*"
