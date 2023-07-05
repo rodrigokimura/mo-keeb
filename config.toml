@@ -17,7 +17,7 @@ icon = [5, 10, 5, 10]
 below_chars = 10
 between_icons = 5
 
-[behaviour]
+[behavior]
 max_age = 5
 volume = 50
 backend = "auto"

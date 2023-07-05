@@ -1,36 +1,53 @@
 import pathlib
 import sys
-from typing import Literal
 
 import tomlkit as tk
+from pydantic import BaseModel
 
-from utils import get_asset_path, get_src, is_in_bunble, is_windows
+from utils import get_asset_path, get_src, is_in_bunble
 
 APP_NAME = "mo-keeb"
 CONFIG_FILE_NAME = "config"
 
-BACKGROUND_COLOR = "#1d3557"
-CHARS_COLOR = "#f1faee"
-ICON_COLOR = "#caf0f8"
-
-CHARS_FONT_SIZE = 48
-ICON_FONT_SIZE = 24
-WINDOW_PADDING = (10, 10, 10, 10)  # top, right, bottom, left
-ICON_PADDING = (5, 10, 5, 10)
-TEXT_ICON_GAP = 10
-ICON_GAP = 5
-
 MAX_CHARS_TO_DISPLAY = 15
-MAX_AGE_IN_SECONDS = 5
 MAX_BUFFER_SIZE = 30
-VOLUME = 50
-
-BACKEND: Literal["keyboard"] | Literal["pynput"] = (
-    "keyboard" if is_windows() else "pynput"
-)
 
 FONT_FILE = get_asset_path("pixeldroidMenuRegular.ttf")
 SOUND_FILE = get_asset_path("sound.wav")
+
+class Colors(BaseModel):
+    background: str
+    chars: str
+    icons: str
+
+
+class FontSizes(BaseModel):
+    chars: int
+    icons: int
+
+
+class Paddings(BaseModel):
+    window: tuple[int, int, int, int]
+    icon: tuple[int, int, int, int]
+
+
+class Gaps(BaseModel):
+    below_chars: int
+    between_icons: int
+
+
+class Behavior(BaseModel):
+    max_age: int
+    volume: int
+    backend: str
+
+
+class Config(BaseModel):
+    colors: Colors
+    font_sizes: FontSizes
+    paddings: Paddings
+    gaps: Gaps
+    behavior: Behavior
 
 
 def get_config_file():
@@ -83,7 +100,7 @@ def write_default_config():
     behaviour["max_age"] = 5
     behaviour["volume"] = 50
     behaviour["backend"] = "auto"
-    config.add("behaviour", behaviour)
+    config.add("behavior", behaviour)
 
     with open(get_config_dir() / f"{CONFIG_FILE_NAME}.toml", "w") as file:
         return tk.dump(config, file)
@@ -98,5 +115,4 @@ def load_config():
             raise ValueError("Failed to create config file")
     with open(file, "r") as file:
         config = tk.load(file)
-
-    print(config)
+    return Config(**config)  # type: ignore

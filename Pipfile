@@ -15,6 +15,7 @@ keyboard = "*"
 pyinstaller = "*"
 gitpython = "*"
 tomlkit = "*"
+pydantic = "*"
 
 [dev-packages]
 black = "*"

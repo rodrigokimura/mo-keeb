@@ -3,7 +3,7 @@ from typing import NamedTuple
 import pygame
 import pygame.freetype
 
-from settings import FONT_FILE, ICON_COLOR, ICON_FONT_SIZE, ICON_PADDING
+from settings import FONT_FILE, Config
 
 
 def recolor(
@@ -40,20 +40,20 @@ class IconImage(NamedTuple):
     pressed: pygame.surface.Surface
 
     @classmethod
-    def from_text(cls, text: str):
-        padding = ICON_PADDING
-        font = pygame.freetype.Font(FONT_FILE, ICON_FONT_SIZE)
+    def from_text(cls, text: str, config: Config):
+        padding = config.paddings.icon
+        font = pygame.freetype.Font(FONT_FILE, config.font_sizes.icons)
         font.antialiased = False
         font.pad = True
-        pressed = draw_text_in_a_box(text, font, ICON_COLOR, padding)
+        pressed = draw_text_in_a_box(text, font, config.colors.icons, padding)
         idle = pressed.copy()
         idle.set_alpha(100)
         return cls(idle=idle, pressed=pressed)
 
     @classmethod
-    def from_file(cls, file: str):
+    def from_file(cls, file: str, config: Config):
         img = pygame.image.load(file)
-        pressed = recolor(img, ICON_COLOR)
+        pressed = recolor(img, config.colors.icons)
         idle = pressed.copy()
         idle.set_alpha(100)
         return cls(idle=idle, pressed=pressed)
