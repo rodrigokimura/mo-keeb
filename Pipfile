@@ -6,7 +6,6 @@ name = "pypi"
 [scripts]
 app = "python src/main.py"
 build = "python src/build.py"
-clean = "rm -rf dist"
 
 [packages]
 pygame = "*"

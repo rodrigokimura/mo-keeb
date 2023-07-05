@@ -2,6 +2,8 @@ from typing import Literal
 
 from utils import get_asset_path, is_windows
 
+APP_NAME = "mo-keeb"
+
 BACKGROUND_COLOR = "#1d3557"
 CHARS_COLOR = "#f1faee"
 ICON_COLOR = "#caf0f8"

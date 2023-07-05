@@ -8,10 +8,6 @@ run:
 build:
 	@pipenv run build
 
-# remove bundled package
-clean:
-	@pipenv run clean
-
 lint:
 	@pipenv run black .
 	@pipenv run isort .

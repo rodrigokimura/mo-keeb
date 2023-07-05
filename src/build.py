@@ -1,15 +1,27 @@
 import os
 
 import main
-from utils import get_asset_path, is_windows
+from settings import APP_NAME
+from utils import get_asset_path
 
 
 def build():
+    executable_name = APP_NAME
     script = main.__file__
     assets = get_asset_path("*")
-    sep = ";" if is_windows() else ":"
+    sep = os.pathsep
     bundled_assets = "./assets"
-    command = f"pipenv run pyinstaller {script} --onefile --noupx --add-data {assets}{sep}{bundled_assets}"
+    options = [
+        "noconfirm",
+        "clean",
+        "onefile",
+        "noconsole",
+        f"name {executable_name}",
+        f"add-data {assets}{sep}{bundled_assets}",
+    ]
+    command = (
+        f"pipenv run pyinstaller {script} {' '.join(f'--{opt}' for opt in options)}"
+    )
     os.popen(command).read()
 
 
