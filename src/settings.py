@@ -1,8 +1,9 @@
+import enum
 import pathlib
 import sys
 
 import tomlkit as tk
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from utils import get_asset_path, get_src, is_in_bunble
 
@@ -15,39 +16,49 @@ MAX_BUFFER_SIZE = 30
 FONT_FILE = get_asset_path("pixeldroidMenuRegular.ttf")
 SOUND_FILE = get_asset_path("sound.wav")
 
+
+class BackendOption(enum.StrEnum):
+    AUTO = "auto"
+    PYNPUT = "pynput"
+    KEYBOARD = "keyboard"
+
+
 class Colors(BaseModel):
-    background: str
-    chars: str
-    icons: str
+    background: str = Field(default="#1d3557")
+    chars: str = Field(default="#f1faee")
+    icons: str = Field(default="#caf0f8")
 
 
 class FontSizes(BaseModel):
-    chars: int
-    icons: int
+    chars: int = Field(default=48)
+    icons: int = Field(default=24)
 
 
 class Paddings(BaseModel):
-    window: tuple[int, int, int, int]
-    icon: tuple[int, int, int, int]
+    window: tuple[int, int, int, int] = Field(default=(10, 10, 10, 10))
+    icon: tuple[int, int, int, int] = Field(default=(5, 10, 5, 10))
 
 
 class Gaps(BaseModel):
-    below_chars: int
-    between_icons: int
+    below_chars: int = Field(default=10)
+    between_icons: int = Field(default=5)
 
 
 class Behavior(BaseModel):
-    max_age: int
-    volume: int
-    backend: str
+    max_age: int = Field(default=5, description="in seconds")
+    volume: int = Field(default=50, description="from 0 to 100")
+    backend: BackendOption = Field(
+        default=BackendOption.AUTO.value,
+        description=f"choices are: {list(opt.value for opt in BackendOption)}",
+    )
 
 
 class Config(BaseModel):
-    colors: Colors
-    font_sizes: FontSizes
-    paddings: Paddings
-    gaps: Gaps
-    behavior: Behavior
+    colors: Colors = Field(default=Colors(), description="in hex")
+    font_sizes: FontSizes = Field(default=FontSizes())
+    paddings: Paddings = Field(default=Paddings(), description="top, right, left, bottom")
+    gaps: Gaps = Field(default=Gaps())
+    behavior: Behavior = Field(default=Behavior())
 
 
 def get_config_file():
@@ -70,37 +81,34 @@ def get_config_dir():
     return get_src().parent
 
 
+def _get_table(model: BaseModel):
+    table = tk.table()
+    for name, info in model.model_fields.items():
+        attr = getattr(model, name)
+        if isinstance(attr, BaseModel):
+            _get_table(attr)
+        else:
+            table[name] = attr
+            if desc := info.description:
+                table[name].comment(desc)
+    return table
+
+
 def write_default_config():
     config = tk.document()
     config.add(tk.comment("mo-keeb's config file"))
     config.add(tk.nl())
+    default_config = Config()
 
-    colors = tk.table()
-    colors["background"] = "#1d3557"
-    colors["chars"] = "#f1faee"
-    colors["icons"] = "#caf0f8"
-    config.add("colors", colors)
+    for name, info in default_config.model_fields.items():
+        f = getattr(default_config, name)
+        if not isinstance(f, BaseModel):
+            continue
 
-    font_sizes = tk.table()
-    font_sizes["chars"] = 48
-    font_sizes["icons"] = 24
-    config.add("font_sizes", font_sizes)
-
-    paddings = tk.table()
-    paddings["window"] = [10, 10, 10, 10]
-    paddings["icon"] = [5, 10, 5, 10]
-    config.add("paddings", paddings)
-
-    gaps = tk.table()
-    gaps["below_chars"] = 10
-    gaps["between_icons"] = 5
-    config.add("gaps", gaps)
-
-    behaviour = tk.table()
-    behaviour["max_age"] = 5
-    behaviour["volume"] = 50
-    behaviour["backend"] = "auto"
-    config.add("behavior", behaviour)
+        table = _get_table(f)
+        if desc := info.description:
+            table.comment(desc)
+        config.add(name, table)
 
     with open(get_config_dir() / f"{CONFIG_FILE_NAME}.toml", "w") as file:
         return tk.dump(config, file)

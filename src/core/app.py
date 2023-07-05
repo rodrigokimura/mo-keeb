@@ -10,24 +10,25 @@ from backends.pynput import Pynput
 from constants import CommandData, Modifier
 from core.abstract import AbstractApp
 from icons import IconImage
-from settings import (
-    FONT_FILE,
-    MAX_BUFFER_SIZE,
-    SOUND_FILE,
-    Config,
-)
+from settings import FONT_FILE, MAX_BUFFER_SIZE, SOUND_FILE, Config
 from utils import is_windows
 
 
 class App(AbstractApp):
     def __init__(self, config: Config) -> None:
         self.config = config
-        self.top_pad, self.right_pad, self.bottom_pad, self.left_pad = self.config.paddings.window
+        (
+            self.top_pad,
+            self.right_pad,
+            self.bottom_pad,
+            self.left_pad,
+        ) = self.config.paddings.window
         self.modifiers = {modifier: False for modifier in Modifier}
         self.setup()
         self.keys_buffer: List[CommandData] = []
         self.icons = {
-            modifier: IconImage.from_text(modifier.value.desc, self.config) for modifier in Modifier
+            modifier: IconImage.from_text(modifier.value.desc, self.config)
+            for modifier in Modifier
         }
         self.clipping_rect = pygame.rect.Rect(
             self.left_pad,
@@ -88,7 +89,11 @@ class App(AbstractApp):
         icon_height = font.get_rect(Modifier.SHIFT.value.desc).height + i_t + i_b
 
         return (
-            text_height + self.config.gaps.below_chars + icon_height + self.top_pad + self.bottom_pad
+            text_height
+            + self.config.gaps.below_chars
+            + icon_height
+            + self.top_pad
+            + self.bottom_pad
         )
 
     def run(self):

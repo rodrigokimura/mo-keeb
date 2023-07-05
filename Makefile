@@ -2,6 +2,7 @@
 
 # run app
 run:
+	# @rm config.toml -f
 	@pipenv run app
 
 # package app in one executable file
