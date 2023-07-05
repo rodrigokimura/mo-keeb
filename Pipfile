@@ -5,8 +5,7 @@ name = "pypi"
 
 [scripts]
 app = "python src/main.py"
-build = "pyinstaller src/main.py --onefile --noupx --add-data=src/assets/*:./assets"
-copy = "cp src/assets dist/assets -r"
+build = "python src/build.py"
 clean = "rm -rf dist"
 
 [packages]
