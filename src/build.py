@@ -1,5 +1,7 @@
 import os
 
+import PyInstaller.__main__
+
 import main
 from settings import APP_NAME
 from utils import get_asset_path
@@ -19,10 +21,8 @@ def build():
         f"name {executable_name}",
         f"add-data {assets}{sep}{bundled_assets}",
     ]
-    command = (
-        f"pipenv run pyinstaller {script} {' '.join(f'--{opt}' for opt in options)}"
-    )
-    os.popen(command).read()
+    command = f"{script} {' '.join(f'--{opt}' for opt in options)}"
+    PyInstaller.__main__.run(command.split())
 
 
 if __name__ == "__main__":
