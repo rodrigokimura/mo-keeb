@@ -9,13 +9,13 @@ build = "python src/build.py"
 version = "python src/version.py"
 
 [packages]
-pygame = "*"
 pynput = "*"
 keyboard = "*"
 pyinstaller = "*"
 gitpython = "*"
 tomlkit = "*"
 pydantic = "*"
+pygame-ce = "*"
 
 [dev-packages]
 black = "*"
