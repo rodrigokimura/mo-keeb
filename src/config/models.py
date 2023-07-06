@@ -4,19 +4,28 @@ import sys
 import tomlkit as tk
 from pydantic import BaseModel, Field
 
-from constants import CONFIG_FILE_NAME, BackendOption
+from constants import CONFIG_FILE_NAME, BackendOption, FontOption
 from utils import get_src, is_in_bunble
 
 
-class Colors(BaseModel):
-    background: str = Field(default="#1d3557")
-    chars: str = Field(default="#f1faee")
-    icons: str = Field(default="#caf0f8")
+class Font(BaseModel):
+    name: FontOption = Field(
+        default=FontOption.SCIENTIFICA.value,
+        description=f"choices are: {list(opt.value for opt in FontOption)}",
+    )
+    size: int = Field()
+    color: str = Field(..., description="as hex code")
 
 
-class FontSizes(BaseModel):
-    chars: int = Field(default=48)
-    icons: int = Field(default=24)
+class Fonts(BaseModel):
+    chars: Font = Field(
+        default=Font(size=48, color="#f1faee"),
+        description="chars displayed when typed",
+    )
+    icons: Font = Field(
+        default=Font(size=24, color="#caf0f8"),
+        description="icons representing modifiers keys",
+    )
 
 
 class Paddings(BaseModel):
@@ -39,8 +48,8 @@ class Behavior(BaseModel):
 
 
 class Config(BaseModel):
-    colors: Colors = Field(default=Colors(), description="in hex")
-    font_sizes: FontSizes = Field(default=FontSizes())
+    background: str = Field(default="#1d3557", description="as hex code")
+    fonts: Fonts = Field(default=Fonts())
     paddings: Paddings = Field(
         default=Paddings(), description="top, right, left, bottom"
     )
@@ -73,7 +82,10 @@ class Config(BaseModel):
         for name, info in model.model_fields.items():
             attr = getattr(model, name)
             if isinstance(attr, BaseModel):
-                cls._get_table(attr)
+                inner_table = cls._get_table(attr)
+                table.add(name, inner_table)
+                if desc := info.description:
+                    inner_table.comment(desc)
             else:
                 table[name] = attr
                 if desc := info.description:

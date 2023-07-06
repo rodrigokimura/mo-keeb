@@ -4,7 +4,7 @@ import pygame
 import pygame.freetype
 
 from config.models import Config
-from constants import FONT_FILE
+from utils import get_font_path_by_name
 
 
 def recolor(
@@ -43,10 +43,12 @@ class IconImage(NamedTuple):
     @classmethod
     def from_text(cls, text: str, config: Config):
         padding = config.paddings.icon
-        font = pygame.freetype.Font(FONT_FILE, config.font_sizes.icons)
+        font = pygame.freetype.Font(
+            get_font_path_by_name(config.fonts.icons.name), config.fonts.icons.size
+        )
         font.antialiased = False
         font.pad = True
-        pressed = draw_text_in_a_box(text, font, config.colors.icons, padding)
+        pressed = draw_text_in_a_box(text, font, config.fonts.icons.color, padding)
         idle = pressed.copy()
         idle.set_alpha(100)
         return cls(idle=idle, pressed=pressed)
@@ -54,7 +56,7 @@ class IconImage(NamedTuple):
     @classmethod
     def from_file(cls, file: str, config: Config):
         img = pygame.image.load(file)
-        pressed = recolor(img, config.colors.icons)
+        pressed = recolor(img, config.fonts.icons.color)
         idle = pressed.copy()
         idle.set_alpha(100)
         return cls(idle=idle, pressed=pressed)

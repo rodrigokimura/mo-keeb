@@ -14,6 +14,10 @@ def get_asset_path(file_name: str):
     return root / "assets" / file_name
 
 
+def get_font_path_by_name(name: str):
+    return get_asset_path(f"{name}.ttf")
+
+
 def is_in_bunble():
     return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
 

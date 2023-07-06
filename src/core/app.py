@@ -8,10 +8,10 @@ from backends.abstract import Backend
 from backends.keyboard import Keyboard
 from backends.pynput import Pynput
 from config.models import Config
-from constants import FONT_FILE, MAX_BUFFER_SIZE, SOUND_FILE, CommandData, Modifier
+from constants import MAX_BUFFER_SIZE, SOUND_FILE, CommandData, Modifier
 from core.abstract import AbstractApp
 from icons import IconImage
-from utils import is_windows
+from utils import get_font_path_by_name, is_windows
 
 
 class App(AbstractApp):
@@ -52,11 +52,17 @@ class App(AbstractApp):
 
     def _setup_fonts(self):
         pygame.font.init()
-        self.font = pygame.freetype.Font(FONT_FILE, self.config.font_sizes.chars)
+        self.font = pygame.freetype.Font(
+            get_font_path_by_name(self.config.fonts.chars.name),
+            self.config.fonts.chars.size,
+        )
         self.font.antialiased = False
         self.font.pad = True
 
-        self.icon_font = pygame.freetype.Font(FONT_FILE, self.config.font_sizes.icons)
+        self.icon_font = pygame.freetype.Font(
+            get_font_path_by_name(self.config.fonts.icons.name),
+            self.config.fonts.icons.size,
+        )
         self.icon_font.antialiased = False
         self.icon_font.pad = True
 
@@ -81,7 +87,10 @@ class App(AbstractApp):
 
     def get_height(self):
         i_t, _, i_b, _ = self.config.paddings.icon
-        font = pygame.freetype.Font(FONT_FILE, self.config.font_sizes.icons)
+        font = pygame.freetype.Font(
+            get_font_path_by_name(self.config.fonts.icons.name),
+            self.config.fonts.icons.size,
+        )
         font.antialiased = False
         font.pad = True
 
@@ -116,7 +125,7 @@ class App(AbstractApp):
         pygame.quit()
 
     def update(self):
-        self.display.fill(self.config.colors.background)
+        self.display.fill(self.config.background)
         self.update_chars()
         self.update_icons()
         self.display.set_clip(self.clipping_rect)
@@ -132,7 +141,7 @@ class App(AbstractApp):
             delta = datetime.now() - typed_at
             delta = delta.total_seconds()
 
-            key_img, key_rect = self.font.render(key, self.config.colors.chars)
+            key_img, key_rect = self.font.render(key, self.config.fonts.chars.color)
             key_img.set_alpha(int((1 - delta / self.config.behavior.max_age) * 255), 0)
             key_rect.topright = (width - acc_width - self.right_pad, self.top_pad)
             acc_width += key_rect.w

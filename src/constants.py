@@ -10,7 +10,6 @@ CONFIG_FILE_NAME = "config"
 MAX_CHARS_TO_DISPLAY = 15
 MAX_BUFFER_SIZE = 30
 
-FONT_FILE = get_asset_path("pixeldroidMenuRegular.ttf")
 SOUND_FILE = get_asset_path("sound.wav")
 
 
@@ -35,3 +34,9 @@ class BackendOption(enum.StrEnum):
     AUTO = "auto"
     PYNPUT = "pynput"
     KEYBOARD = "keyboard"
+
+
+class FontOption(enum.StrEnum):
+    SCIENTIFICA = "scientifica"
+    PIXELDROID_MENU = "pixeldroid_menu"
+    MONOCRAFT = "monocraft"

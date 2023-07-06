@@ -1,13 +1,15 @@
 # mo-keeb's config file
 
-[colors] # in hex
-background = "#1d3557"
-chars = "#f1faee"
-icons = "#caf0f8"
+[fonts]
+[fonts.chars] # chars displayed when typed
+name = "scientifica" # choices are: ['scientifica', 'pixeldroid_menu', 'monocraft']
+size = 48
+color = "#f1faee" # as hex code
 
-[font_sizes]
-chars = 48
-icons = 24
+[fonts.icons] # icons representing modifiers keys
+name = "scientifica" # choices are: ['scientifica', 'pixeldroid_menu', 'monocraft']
+size = 24
+color = "#caf0f8" # as hex code
 
 [paddings] # top, right, left, bottom
 window = [10, 10, 10, 10]
