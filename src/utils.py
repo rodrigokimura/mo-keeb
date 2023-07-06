@@ -59,3 +59,15 @@ def get_commit_from_sha(short_commit_sha: str):
     repo = git.Repo(search_parent_directories=True)  # type: ignore
     commit = repo.commit(short_commit_sha)
     return commit
+
+
+def get_font(name: str):
+    import pygame.freetype
+
+    pygame.freetype.init()
+
+    try:
+        font = pygame.freetype.Font(get_font_path_by_name(name))
+    except FileNotFoundError:
+        font = pygame.freetype.SysFont(name, 10)
+    return font

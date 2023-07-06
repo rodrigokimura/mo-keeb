@@ -2,14 +2,16 @@
 
 [fonts]
 [fonts.chars] # chars displayed when typed
-name = "scientifica" # choices are: ['scientifica', 'pixeldroid_menu', 'monocraft']
+name = "scientifica" # choices are ['scientifica', 'pixeldroid_menu', 'monocraft'], or any other system font
 size = 48
 color = "#f1faee" # as hex code
+antialiasing = false # add antialiasing filter; false recommended for 'pixel art' fonts
 
 [fonts.icons] # icons representing modifiers keys
-name = "scientifica" # choices are: ['scientifica', 'pixeldroid_menu', 'monocraft']
+name = "scientifica" # choices are ['scientifica', 'pixeldroid_menu', 'monocraft'], or any other system font
 size = 24
 color = "#caf0f8" # as hex code
+antialiasing = false # add antialiasing filter; false recommended for 'pixel art' fonts
 
 [paddings] # top, right, left, bottom
 window = [10, 10, 10, 10]

@@ -9,21 +9,25 @@ from utils import get_src, is_in_bunble
 
 
 class Font(BaseModel):
-    name: FontOption = Field(
+    name: str = Field(
         default=FontOption.SCIENTIFICA.value,
-        description=f"choices are: {list(opt.value for opt in FontOption)}",
+        description=f"choices are {list(opt.value for opt in FontOption)}, or any other system font",
     )
     size: int = Field()
     color: str = Field(..., description="as hex code")
+    antialiasing: bool = Field(
+        default=False,
+        description="add antialiasing filter; false recommended for 'pixel art' fonts",
+    )
 
 
 class Fonts(BaseModel):
     chars: Font = Field(
-        default=Font(size=48, color="#f1faee"),
+        default=Font(size=48, color="#f1faee", antialiasing=False),
         description="chars displayed when typed",
     )
     icons: Font = Field(
-        default=Font(size=24, color="#caf0f8"),
+        default=Font(size=24, color="#caf0f8", antialiasing=False),
         description="icons representing modifiers keys",
     )
 
@@ -89,7 +93,8 @@ class Config(BaseModel):
             else:
                 table[name] = attr
                 if desc := info.description:
-                    table[name].comment(desc)
+                    table.value.item(name).comment(info.description)
+
         return table
 
     @classmethod

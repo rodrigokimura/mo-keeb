@@ -11,7 +11,7 @@ from config.models import Config
 from constants import MAX_BUFFER_SIZE, SOUND_FILE, CommandData, Modifier
 from core.abstract import AbstractApp
 from icons import IconImage
-from utils import get_font_path_by_name, is_windows
+from utils import get_font, is_windows
 
 
 class App(AbstractApp):
@@ -51,19 +51,14 @@ class App(AbstractApp):
         self.display = pygame.display.set_mode((self.get_width(), self.get_height()))
 
     def _setup_fonts(self):
-        pygame.font.init()
-        self.font = pygame.freetype.Font(
-            get_font_path_by_name(self.config.fonts.chars.name),
-            self.config.fonts.chars.size,
-        )
-        self.font.antialiased = False
+        self.font = get_font(self.config.fonts.chars.name)
+        self.font.size = self.config.fonts.chars.size
+        self.font.antialiased = self.config.fonts.chars.antialiasing
         self.font.pad = True
 
-        self.icon_font = pygame.freetype.Font(
-            get_font_path_by_name(self.config.fonts.icons.name),
-            self.config.fonts.icons.size,
-        )
-        self.icon_font.antialiased = False
+        self.icon_font = get_font(self.config.fonts.icons.name)
+        self.icon_font.size = self.config.fonts.icons.size
+        self.icon_font.antialiased = self.config.fonts.icons.antialiasing
         self.icon_font.pad = True
 
     def _setup_sound(self):
@@ -87,13 +82,12 @@ class App(AbstractApp):
 
     def get_height(self):
         i_t, _, i_b, _ = self.config.paddings.icon
-        font = pygame.freetype.Font(
-            get_font_path_by_name(self.config.fonts.icons.name),
-            self.config.fonts.icons.size,
-        )
-        font.antialiased = False
+        font = get_font(self.config.fonts.icons.name)
+        font.size = self.config.fonts.icons.size
+        font.antialiased = self.config.fonts.icons.antialiasing
         font.pad = True
 
+        # TODO: improve the way we calculate height
         text_height = self.font.get_rect("W").height
         icon_height = font.get_rect(Modifier.SHIFT.value.desc).height + i_t + i_b
 
