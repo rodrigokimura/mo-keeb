@@ -14,6 +14,11 @@ def get_asset_path(file_name: str):
     return root / "assets" / file_name
 
 
+def get_sound_path_by_code_and_profile(code: str, profile: str):
+    root = get_src()
+    return root / "assets" / "sounds" / profile / f"{code}.wav"
+
+
 def get_font_path_by_name(name: str):
     return get_asset_path(f"{name}.ttf")
 
@@ -71,3 +76,19 @@ def get_font(name: str):
     except FileNotFoundError:
         font = pygame.freetype.SysFont(name, 10)
     return font
+
+
+def backend_option_to_class(opt: str):
+    from backends.keyboard import Keyboard
+    from backends.pynput import Pynput
+    from constants import BackendOption
+
+    if opt == BackendOption.AUTO:
+        backend = Keyboard if is_windows() else Pynput
+    elif opt == BackendOption.KEYBOARD:
+        backend = Keyboard
+    elif opt == BackendOption.PYNPUT:
+        backend = Pynput
+    else:
+        raise NotImplementedError
+    return backend

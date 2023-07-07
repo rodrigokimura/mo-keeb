@@ -5,13 +5,12 @@ import pygame
 import pygame.freetype
 
 from backends.abstract import Backend
-from backends.keyboard import Keyboard
-from backends.pynput import Pynput
 from config.models import Config
-from constants import MAX_BUFFER_SIZE, SOUND_FILE, CommandData, Modifier
+from constants import MAX_BUFFER_SIZE, CommandData, Modifier
 from core.abstract import AbstractApp
 from icons import IconImage
-from utils import get_font, is_windows
+from sound import get_default_sound, get_sounds
+from utils import backend_option_to_class, get_font
 
 
 class App(AbstractApp):
@@ -36,10 +35,7 @@ class App(AbstractApp):
             (self.display.get_width() - self.right_pad - self.left_pad),
             (self.display.get_height() - self.top_pad - self.bottom_pad),
         )
-        if self.config.behavior.backend == "auto":
-            backend = Keyboard if is_windows() else Pynput
-        else:
-            backend = Keyboard if self.config.behavior.backend == "keyboard" else Pynput
+        backend = backend_option_to_class(self.config.behavior.backend)
         self.backend: Backend = backend(self)
 
     def setup(self):
@@ -65,7 +61,10 @@ class App(AbstractApp):
         self.volume = self.config.behavior.volume
         self.channel = pygame.mixer.Channel(pygame.mixer.get_num_channels() - 1)
         self.channel.set_volume(self.volume / 100)
-        self.sound = pygame.mixer.Sound(SOUND_FILE)
+        self.fallback = get_default_sound(self.config.behavior.profile)
+        self.sounds = get_sounds(
+            self.config.behavior.backend, self.config.behavior.profile
+        )
 
     def get_width(self):
         _, pad_right, _, pad_left = self.config.paddings.icon
@@ -154,6 +153,8 @@ class App(AbstractApp):
             acc_width += img.get_size()[0] + self.config.gaps.between_icons
 
     def on_press(self, key_name: str):
+        self.channel.play(self.sounds.get(key_name, self.fallback))
+        print(key_name)
         mod_pressed = False
         for mod in self.modifiers:
             if mod.value.str_id in key_name:
@@ -169,8 +170,6 @@ class App(AbstractApp):
                 self.keys_buffer.pop()
 
             self.keys_buffer.insert(0, key_data)
-
-        self.channel.play(self.sound)
 
     def on_release(self, key_name: str):
         # special case

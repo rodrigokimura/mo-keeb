@@ -24,4 +24,5 @@ between_icons = 5
 [behavior]
 max_age = 5 # in seconds
 volume = 50 # from 0 to 100
-backend = "auto" # choices are: ['auto', 'pynput', 'keyboard']
+backend = "auto" # choices are ['auto', 'pynput', 'keyboard']
+profile = "brown" # choices are ['red', 'blue', 'brown']

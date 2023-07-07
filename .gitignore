@@ -5,3 +5,5 @@
 build/
 dist/
 *.spec
+script.py
+reserved/

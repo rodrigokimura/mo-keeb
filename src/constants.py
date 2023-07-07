@@ -40,3 +40,9 @@ class FontOption(enum.StrEnum):
     SCIENTIFICA = "scientifica"
     PIXELDROID_MENU = "pixeldroid_menu"
     MONOCRAFT = "monocraft"
+
+
+class ProfileOption(enum.StrEnum):
+    RED = "red"
+    BLUE = "blue"
+    BROWN = "brown"

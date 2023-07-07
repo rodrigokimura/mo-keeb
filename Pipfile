@@ -16,6 +16,7 @@ gitpython = "*"
 tomlkit = "*"
 pydantic = "*"
 pygame-ce = "*"
+numpy = "*"
 
 [dev-packages]
 black = "*"

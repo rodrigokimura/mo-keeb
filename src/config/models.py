@@ -4,7 +4,7 @@ import sys
 import tomlkit as tk
 from pydantic import BaseModel, Field
 
-from constants import CONFIG_FILE_NAME, BackendOption, FontOption
+from constants import CONFIG_FILE_NAME, BackendOption, FontOption, ProfileOption
 from utils import get_src, is_in_bunble
 
 
@@ -47,7 +47,11 @@ class Behavior(BaseModel):
     volume: int = Field(default=50, description="from 0 to 100")
     backend: BackendOption = Field(
         default=BackendOption.AUTO.value,
-        description=f"choices are: {list(opt.value for opt in BackendOption)}",
+        description=f"choices are {list(opt.value for opt in BackendOption)}",
+    )
+    profile: ProfileOption = Field(
+        default=ProfileOption.BROWN.value,
+        description=f"choices are {list(opt.value for opt in ProfileOption)}",
     )
 
 
