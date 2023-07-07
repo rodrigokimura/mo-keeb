@@ -21,6 +21,9 @@ def build():
         "noconsole",
         f"name {executable_name}",
         f"add-data {assets}{sep}{bundled_assets}",
+        f"add-data {get_asset_path('sounds')/'blue'/'*'}{sep}{bundled_assets}/sounds/blue",
+        f"add-data {get_asset_path('sounds')/'brown'/'*'}{sep}{bundled_assets}/sounds/brown",
+        f"add-data {get_asset_path('sounds')/'red'/'*'}{sep}{bundled_assets}/sounds/red",
     ]
     command = f"{script} {' '.join(f'--{opt}' for opt in options)}"
     PyInstaller.__main__.run(command.split())
