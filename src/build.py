@@ -30,14 +30,16 @@ def build():
 
 
 def get_executable_file_name(app_name: str, version_id: str):
-    if is_linux():
-        os_name = "linux"
-    elif is_windows():
-        os_name = "windows"
-    elif is_macos():
-        os_name = "macos"
-    else:
-        raise NotImplementedError
+    os_name = os.getenv("OS_NAME")
+    if os_name is None:
+        if is_linux():
+            os_name = "linux"
+        elif is_windows():
+            os_name = "windows"
+        elif is_macos():
+            os_name = "macos"
+        else:
+            raise NotImplementedError
     return os.path.join(os_name, f"{app_name}")
     # name = f"{app_name}_{version_id}"
     # return name
