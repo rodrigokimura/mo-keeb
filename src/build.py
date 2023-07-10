@@ -34,7 +34,7 @@ def check_build_deps():
     if is_windows():
         import subprocess
 
-        subprocess.run("pip install pywin32-ctypes")
+        subprocess.run("pip install pywin32-ctypes".split())
 
 
 def get_executable_file_name(app_name: str, version_id: str, extension=False):
