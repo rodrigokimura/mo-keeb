@@ -81,4 +81,3 @@ jobs:
           upload_url: ${{ steps.get_release_info.outputs.upload_url }}
           asset_path: ./dist/${{ runner.os }}/mo-keeb
           asset_name: mo-keeb
-          asset_content_type: ${{ matrix.ASSET_MIME}}
