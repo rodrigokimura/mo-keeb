@@ -13,7 +13,7 @@ jobs:
         os:
           - "windows-latest"
           - "ubuntu-latest"
-          # - "macos-latest"
+          - "macos-latest"
 
     steps:
     - uses: actions/checkout@v2
@@ -29,8 +29,6 @@ jobs:
       if: runner.os == 'Windows'
 
     - run: pipenv run build
-    # Optionally verify that it works (provided that it does not need user interaction)
-    # - run: ./dist/your-code/your-code
     - uses: actions/upload-artifact@v2
       with:
         path: dist/*

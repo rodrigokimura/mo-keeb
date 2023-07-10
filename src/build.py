@@ -25,10 +25,6 @@ def build():
         f"add-data {get_asset_path('sounds')/'red'/'*'}{sep}{bundled_assets}/sounds/red",
     ]
 
-    # # important when executed from pipeline
-    # if is_linux():
-    #     options.append(f"hidden-import pynput.keyboard._xorg")
-
     command = f"{script} {' '.join(f'--{opt}' for opt in options)}"
     PyInstaller.__main__.run(command.split())
 
