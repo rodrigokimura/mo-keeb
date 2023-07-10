@@ -3,7 +3,7 @@ import os
 import PyInstaller.__main__
 
 from constants import APP_NAME
-from utils import get_asset_path, get_commit_sha, is_windows
+from utils import get_asset_path, get_commit_sha
 
 
 def build():
@@ -29,12 +29,10 @@ def build():
     PyInstaller.__main__.run(command.split())
 
 
-def get_executable_file_name(app_name: str, version_id: str, extension=False):
-    name = f"{app_name}_{version_id}"
-    if extension:
-        if is_windows():
-            name += ".exe"
-    return name
+def get_executable_file_name(app_name: str, version_id: str):
+    return app_name
+    # name = f"{app_name}_{version_id}"
+    # return name
 
 
 if __name__ == "__main__":
