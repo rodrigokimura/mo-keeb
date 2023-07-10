@@ -8,7 +8,6 @@ from utils import get_asset_path, get_commit_sha, is_windows
 
 
 def build():
-    check_build_deps()
     version_id = get_commit_sha()
     executable_name = get_executable_file_name(APP_NAME, version_id)
     script = main.__file__
@@ -28,19 +27,6 @@ def build():
     ]
     command = f"{script} {' '.join(f'--{opt}' for opt in options)}"
     PyInstaller.__main__.run(command.split())
-
-
-def check_build_deps():
-    if is_windows():
-        import subprocess
-
-        p = subprocess.Popen(
-            "pip install pywin32-ctypes".split(),
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-        )
-        p.wait()
 
 
 def get_executable_file_name(app_name: str, version_id: str, extension=False):

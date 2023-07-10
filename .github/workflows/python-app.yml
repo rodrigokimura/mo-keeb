@@ -23,6 +23,11 @@ jobs:
 
     - run: pip install pipenv
     - run: pipenv install
+
+    - name: Conditional deps for Windows
+      run: pip install pywin32-ctypes
+      if: runner.os == "Windows"
+
     - run: pipenv run build
     # Optionally verify that it works (provided that it does not need user interaction)
     # - run: ./dist/your-code/your-code
