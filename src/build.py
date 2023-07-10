@@ -32,12 +32,9 @@ def build():
 
 def check_build_deps():
     if is_windows():
-        try:
-            from win32ctypes.pywin32 import win32api
-        except ImportError:
-            import subprocess
+        import subprocess
 
-            subprocess.run("pip install pywin32-ctypes")
+        subprocess.run("pip install pywin32-ctypes")
 
 
 def get_executable_file_name(app_name: str, version_id: str, extension=False):
