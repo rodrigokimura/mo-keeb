@@ -22,9 +22,8 @@ def build():
         f"add-data {get_asset_path('sounds')/'blue'/'*'}{sep}{bundled_assets}/sounds/blue",
         f"add-data {get_asset_path('sounds')/'brown'/'*'}{sep}{bundled_assets}/sounds/brown",
         f"add-data {get_asset_path('sounds')/'red'/'*'}{sep}{bundled_assets}/sounds/red",
+        "hidden-import pynput.keyboard._xorg",
     ]
-    if is_linux():
-        options.append("hidden-import pynput.keyboard._xorg")
 
     command = f"{script} {' '.join(f'--{opt}' for opt in options)}"
     PyInstaller.__main__.run(command.split())
