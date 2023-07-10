@@ -8,6 +8,7 @@ from utils import get_asset_path, get_commit_sha, is_windows
 
 
 def build():
+    check_build_deps()
     version_id = get_commit_sha()
     executable_name = get_executable_file_name(APP_NAME, version_id)
     script = main.__file__
@@ -27,6 +28,16 @@ def build():
     ]
     command = f"{script} {' '.join(f'--{opt}' for opt in options)}"
     PyInstaller.__main__.run(command.split())
+
+
+def check_build_deps():
+    if is_windows():
+        try:
+            from win32ctypes.pywin32 import win32api
+        except ImportError:
+            import subprocess
+
+            subprocess.run("pip install pywin32-ctypes")
 
 
 def get_executable_file_name(app_name: str, version_id: str, extension=False):
