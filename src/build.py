@@ -3,7 +3,7 @@ import os
 import PyInstaller.__main__
 
 from constants import APP_NAME
-from utils import get_asset_path, get_commit_sha
+from utils import get_asset_path, get_commit_sha, is_linux, is_macos, is_windows
 
 
 def build():
@@ -30,7 +30,15 @@ def build():
 
 
 def get_executable_file_name(app_name: str, version_id: str):
-    return app_name
+    if is_linux():
+        os_name = "linux"
+    elif is_windows():
+        os_name = "windows"
+    elif is_macos():
+        os_name = "macos"
+    else:
+        raise NotImplementedError
+    return os.path.join(os_name, f"{app_name}")
     # name = f"{app_name}_{version_id}"
     # return name
 
