@@ -6,7 +6,15 @@ import git
 
 
 def is_windows():
-    return os.name == "nt"
+    return sys.platform == "win21"
+
+
+def is_linux():
+    return sys.platform in ["linux", "linux2"]
+
+
+def is_macos():
+    return sys.platform == "darwin"
 
 
 def get_asset_path(file_name: str):
