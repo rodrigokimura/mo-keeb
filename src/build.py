@@ -2,15 +2,14 @@ import os
 
 import PyInstaller.__main__
 
-import main
 from constants import APP_NAME
-from utils import get_asset_path, get_commit_sha, is_linux, is_windows
+from utils import get_asset_path, get_commit_sha, is_windows
 
 
 def build():
     version_id = get_commit_sha()
     executable_name = get_executable_file_name(APP_NAME, version_id)
-    script = main.__file__
+    script = os.path.join(os.path.abspath(os.path.dirname(__file__)), "main.py")
     assets = get_asset_path("*")
     sep = os.pathsep
     bundled_assets = "./assets"
@@ -26,9 +25,9 @@ def build():
         f"add-data {get_asset_path('sounds')/'red'/'*'}{sep}{bundled_assets}/sounds/red",
     ]
 
-    # important when executed from pipeline
-    if is_linux():
-        options.append(f"hidden-import pynput.keyboard._xorg")
+    # # important when executed from pipeline
+    # if is_linux():
+    #     options.append(f"hidden-import pynput.keyboard._xorg")
 
     command = f"{script} {' '.join(f'--{opt}' for opt in options)}"
     PyInstaller.__main__.run(command.split())
