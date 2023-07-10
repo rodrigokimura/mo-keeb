@@ -40,7 +40,7 @@ def get_executable_file_name(app_name: str, version_id: str):
             os_name = "macos"
         else:
             raise NotImplementedError
-    return os.path.join(os_name, f"{app_name}")
+    return f"{app_name}-{os_name}"
     # name = f"{app_name}_{version_id}"
     # return name
 
